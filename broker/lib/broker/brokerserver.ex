@@ -18,7 +18,7 @@ defmodule Broker.BrokerServer do
   end
 
   def handle_cast({:add_type, type}, {types, triggers, stats}) do
-    {:noreply, {types ++ [type], triggers, stats}}
+    {:noreply, {Enum.uniq(types ++ [type]), triggers, stats}}
   end
 
   # Async handling of an emit of a new event.
@@ -26,6 +26,7 @@ defmodule Broker.BrokerServer do
   def handle_cast(
       {:emit, event = %{"type" => type, "source" => source}},
       {types, triggers, stats}) do
+    GenServer.cast(BrokerServer, {:add_type, type})
     GenServer.cast(Ledger, {:record, event})
     # Non linked spawn
     IO.puts("BrokerServer:emit(Cast) #{inspect event}")

@@ -32,9 +32,16 @@ defmodule BrokerWeb.EventController do
     render conn, "login_pii_scrubber.json", reply: event
   end
 
-  def send_email(conn, params) do  
+  def send_email(conn, params) do
     # In the prototype, this doesn't do anything.
-    render conn, "send_email.json", reply: %{}
+    data = CloudEvent.data(params)
+    email = data["email"]
+
+    event = build_event("SendEmail", "EmailSentEvent",
+        "#{CloudEvent.type(params)}-#{CloudEvent.source(params)}-#{CloudEvent.id(params)}",
+        %{"email": email, "success": true})
+
+    render conn, "send_email.json", reply: event
   end
 
   def login_accounting(conn, _params) do

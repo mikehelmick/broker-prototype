@@ -1,6 +1,9 @@
 <ul>
  <li>Event: <%= inspect @event %></li>
  <ul>
+ <%= if Map.size(Map.get(@childMap, CloudEvent.child_context_tuple(@event))) == 0 do %>
+   <li><b>NO SUBSCRIBERS</b></li>
+ <% end %>
  <%= for {trigger, children} <- Map.get(@childMap, CloudEvent.child_context_tuple(@event)) do %>
   <li>Trigger: <%= inspect trigger %></li>
     <%= for childEid <- children do %>

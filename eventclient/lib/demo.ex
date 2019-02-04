@@ -15,6 +15,10 @@ defmodule Demo do
 
     EventClient.add_trigger("LoginNoPII", "",
         "http://localhost:4000/deliver/experiment_a")
+
+    # EventClient.add_type("EmailSentEvent")
+    # We're not going to register this one, it should be auto
+    # registered in the broker in invocation of the send_email service
   end
 
   def send_login_event(id, name, email, age, city) do
