@@ -1,0 +1,12 @@
+<% import CloudEvent %>
+
+<section class="row">
+  <h1>Execution Flow for  <%= inspect @eventId %></h1>
+</section>
+
+<section class="row">
+
+<%= render("event_detail.html",
+    event: @topEvent, eventCache: @eventCache, childMap: @childMap) %>
+
+</section>

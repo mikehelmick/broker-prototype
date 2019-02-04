@@ -4,8 +4,8 @@
 
 <section class="row">
 <ul>
-  <%= for event <- @events do %>
-    <li><%= inspect event %></li>
+  <%= for event = {type, source, id} <- @events do %>
+    <li><a href="/event?type=<%= type %>&source=<%= source %>&id=<%= id %>"><%= inspect event %></a></li>
   <% end %>
 </ul>
 </section>

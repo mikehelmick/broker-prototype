@@ -17,12 +17,12 @@ defmodule BrokerWeb.ApiController do
     render conn, "set_trigger.json", trigger: params
   end
 
-  def list_triggers(conn, params) do
+  def list_triggers(conn, _params) do
     triggers = GenServer.call(BrokerServer, {:get_triggers})
     render conn, "list_triggers.json", triggers: triggers
   end
 
-  def list_types(conn, params) do
+  def list_types(conn, _params) do
     types = GenServer.call(BrokerServer, {:list_types})
     render conn, "list_types.json", types: types
   end

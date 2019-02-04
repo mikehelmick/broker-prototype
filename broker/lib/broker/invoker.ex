@@ -16,22 +16,22 @@ defmodule Invoker do
   defp fan_out_invoke([trigger | triggers], event, matches) do
     trigger_type = trigger["type"]
     trigger_source = trigger["source"]
-    destination = trigger["destination"]
     event_type = CloudEvent.type(event)
     event_source = CloudEvent.source(event)
     case {trigger_type, trigger_source, event_type, event_source} do
       {x, y, x, y} ->
-        spawn fn -> do_invoke(event, destination) end
+        spawn fn -> do_invoke(event, trigger) end
         fan_out_invoke(triggers, event, matches + 1)
       {x, "", x, _} ->
-        spawn fn -> do_invoke(event, destination) end
+        spawn fn -> do_invoke(event, trigger) end
         fan_out_invoke(triggers, event, matches + 1)
       _ ->
         fan_out_invoke(triggers, event, matches)
     end
   end
 
-  def do_invoke(event, destination) do
+  def do_invoke(event, trigger) do
+    destination = trigger["destination"]
     IO.puts("sending #{destination} event: #{inspect event}")
     type = CloudEvent.type(event)
     source = CloudEvent.source(event)
@@ -46,7 +46,7 @@ defmodule Invoker do
         # Put them back on the broker
         reply = Jason.decode!(results.body)
         IO.puts("got reply #{inspect reply}")
-        handle_reply(event, destination, reply)
+        handle_reply(event, trigger, reply)
 
         # Do the accounting.
         GenServer.cast(BrokerServer, {:add_delivered, type, source})
@@ -63,19 +63,25 @@ defmodule Invoker do
   defp maybe_add_source(event, _), do: event
 
   # single event
-  defp handle_reply(_event, _destination, reply) when reply == %{} do
-    # Reply was empty
+  defp handle_reply(event, trigger, reply) when reply == %{} do
+    GenServer.cast(Ledger,
+        {:add_child, CloudEvent.child_context_tuple(event), trigger})
   end
-  defp handle_reply(event, destination, reply) when is_map(reply) do
+  defp handle_reply(event, trigger, reply) when is_map(reply) do
+    destination = trigger["destination"]
     new_event = reply
       |> maybe_add_source(destination)
       |> CloudEvent.context(CloudEvent.child_context(event))
+    GenServer.cast(Ledger,
+        {:add_child, CloudEvent.child_context_tuple(event), trigger, [reply]})
     GenServer.cast(BrokerServer, {:emit, new_event})
   end
-  defp handle_reply(_event, _destination, []) do
+  defp handle_reply(event, trigger, []) do
+    GenServer.cast(Ledger,
+        {:add_child, CloudEvent.child_context_tuple(event), trigger})
   end
-  defp handle_reply(event, destination, [reply | rest]) do
-    handle_reply(event, destination, reply)
-    handle_reply(event, destination, rest)
+  defp handle_reply(event, trigger, [reply | rest]) do
+    handle_reply(event, trigger, reply)
+    handle_reply(event, trigger, rest)
   end
 end

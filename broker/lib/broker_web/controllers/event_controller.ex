@@ -32,17 +32,18 @@ defmodule BrokerWeb.EventController do
     render conn, "login_pii_scrubber.json", reply: event
   end
 
-  def send_email(conn, params) do
-    IO.puts("send_email: #{inspect params}")
-
+  def send_email(conn, params) do  
+    # In the prototype, this doesn't do anything.
     render conn, "send_email.json", reply: %{}
   end
 
-  def login_accounting(conn, params) do
+  def login_accounting(conn, _params) do
+    # In the prototype, this doesn't do anything.
     render conn, "login_accounting.json", reply: %{}
   end
 
-  def experiment_a(conn, params) do
+  def experiment_a(conn, _params) do
+    # In the prototype, this doesn't do anything.
     render conn, "experiment_a.json", reply: %{}
   end
 

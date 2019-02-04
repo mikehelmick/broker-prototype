@@ -34,6 +34,9 @@ defmodule CloudEvent do
   def child_context(%{"type" => type, "source" => source, "id" => id}) do
     [type, source, id]
   end
+  def child_context_tuple(%{"type" => type, "source" => source, "id" => id}) do
+    {type, source, id}
+  end
 
   # Methods for build a cloud event up.
   # Set up for chainging

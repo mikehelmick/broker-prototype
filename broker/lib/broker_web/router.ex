@@ -18,6 +18,7 @@ defmodule BrokerWeb.Router do
 
     get "/", PageController, :index
     get "/events", PageController, :events
+    get "/event", PageController, :event
   end
 
   scope "/deliver", BrokerWeb do
