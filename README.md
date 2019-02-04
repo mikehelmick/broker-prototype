@@ -37,9 +37,9 @@ kicking things off.
  * `cd eventclient`
  * Start interactive elixir, `iex -S mix`
  * Now you can run commands from the event client. Here is the most basic example
-  * `Demo.setup_demo()`
-   * This registered 2 event types and 4 triggers, you can see them in your browser at the URL above
-  * `Demo.send_login_event("1", "Stephanie", "this.is.pii@example.com", "31", "Seattle")`
-   * You can see the output in the console for the broker Server
-   * You can see some of the event details in the UI as well
+   * `Demo.setup_demo()`
+     * This registered 2 event types and 4 triggers, you can see them in your browser at the URL above
+   * `Demo.send_login_event("1", "Stephanie", "this.is.pii@example.com", "31", "Seattle")`
+     * You can see the output in the console for the broker Server
+     * You can see some of the event details in the UI as well
  * If you want to manipulate the API directly, see the `EventClient` module
