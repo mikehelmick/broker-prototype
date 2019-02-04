@@ -19,7 +19,14 @@ defmodule Demo do
     # EventClient.add_type("EmailSentEvent")
     # We're not going to register this one, it should be auto
     # registered in the broker in invocation of the send_email service
+
+    EventClient.add_type("ExpResult1")
+    EventClient.add_type("ExpResult2")
+
+    EventClient.add_trigger("ExpResult1", "ExperimentA",
+        "http://localhost:4000/deliver/experiment_b")
   end
+
 
   def send_login_event(id, name, email, age, city) do
     EventClient.send_event(

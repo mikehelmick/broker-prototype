@@ -5,5 +5,5 @@ defmodule BrokerWeb.EventView do
   def render("send_email.json", %{reply: reply}), do: reply
   def render("login_accounting.json", %{reply: reply}), do: reply
   def render("experiment_a.json", %{reply: reply}), do: reply
-
+  def render("experiment_b.json", %{reply: reply}), do: reply
 end

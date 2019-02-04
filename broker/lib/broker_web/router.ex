@@ -28,6 +28,7 @@ defmodule BrokerWeb.Router do
     post "/send_email", EventController, :send_email
     post "/login_accounting", EventController, :login_accounting
     post "/experiment_a", EventController, :experiment_a
+    post "/experiment_b", EventController, :experiment_b
   end
 
   scope "/api", BrokerWeb do

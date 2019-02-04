@@ -6,6 +6,9 @@
  <% end %>
  <%= for {trigger, children} <- Map.get(@childMap, CloudEvent.child_context_tuple(@event)) do %>
   <li>Trigger: <%= inspect trigger %></li>
+    <%= if children == [] do %>
+      <ul><li><i>Success, no events in reply.</i></li></ul>
+    <% end %>
     <%= for childEid <- children do %>
     <%= render("event_detail.html",
         event: Map.get(@eventCache, childEid), eventCache: @eventCache, childMap: @childMap) %>

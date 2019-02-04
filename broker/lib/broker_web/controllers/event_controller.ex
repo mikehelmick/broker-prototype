@@ -49,9 +49,21 @@ defmodule BrokerWeb.EventController do
     render conn, "login_accounting.json", reply: %{}
   end
 
-  def experiment_a(conn, _params) do
-    # In the prototype, this doesn't do anything.
-    render conn, "experiment_a.json", reply: %{}
+  def experiment_a(conn, params) do
+
+    event1 = build_event("ExperimentA", "ExpResult1",
+        "#{CloudEvent.type(params)}-#{CloudEvent.source(params)}-#{CloudEvent.id(params)}",
+        %{"resultA": "positive"})
+    event2 = build_event("ExperimentA", "ExpResult2",
+        "#{CloudEvent.type(params)}-#{CloudEvent.source(params)}-#{CloudEvent.id(params)}",
+        %{"resultB": "negative"})
+
+    render conn, "experiment_a.json", reply: [event1, event2]
+  end
+
+  def experiment_b(conn, _params) do
+    # No output from experiment B
+    render conn, "experiment_b.json", reply: %{}
   end
 
 end
