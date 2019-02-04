@@ -1,0 +1,43 @@
+<section class="row">
+  <h1>BrokerServer Status</h1>
+</section>
+
+<section class="row">
+<h2>Registered Event Types</h2>
+</section>
+<section class="row">
+<ul>
+  <%= for type <- @types do %>
+   <li><%= type %></li>
+  <% end %>
+</ul>
+</section>
+
+<section class="row">
+<h2>Registered Triggers</h2>
+</section>
+<section class="row">
+<ul>
+<%= for trigger <- @triggers do %>
+  <li>{<%= trigger["type"] %>, <%= trigger["source"] %>} =&gt
+    <%= trigger["destination"] %></li>
+<% end %>
+</ul>
+</section>
+
+<section class="row">
+<h2>Event Stats by source/type</h2>
+</section>
+<section class="row">
+<ul>
+<%= for {{type, source}, {sent, delivered, dropped}} <- @stats do %>
+ <li>source: <b><%= source %></b> | type: <b><a href="/events?type=<%= type %>"><%= type %></a></b>
+   <ul>
+    <li>sent: <%= sent %></li>
+    <li>delivered: <%= delivered %></li>
+    <li>dropped: <%= dropped %></li>
+   </ul>
+ </li>
+<% end %>
+</ul>
+</section>

@@ -1,0 +1,11 @@
+<section class="row">
+  <h1>Events of type <%= @type %></h1>
+</section>
+
+<section class="row">
+<ul>
+  <%= for event <- @events do %>
+    <li><%= inspect event %></li>
+  <% end %>
+</ul>
+</section>
